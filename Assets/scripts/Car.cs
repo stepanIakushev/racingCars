@@ -2,27 +2,36 @@ using UnityEngine;
 
 public class Car : MonoBehaviour
 {
-    Vector3 movement;
+    private Rigidbody2D rb;
 
-    void Start()
+    private Vector3 movement;
+
+    private void Start()
     {
         transform.position = new Vector3(Constants.carStartXPosition, Constants.carStartYPosition);
-        movement = Vector2.zero;
+        rb = GetComponent<Rigidbody2D>();
+        movement = Vector3.zero;
     }
 
-    void Update()
+    private void Update()
     {
-        movement = Vector2.zero;
+        movement = Vector3.zero;
+        rb.rotation = 0f;
         if (Input.GetKey(Constants.carLeftMovementKey))
         {
-            movement = new Vector3(-(Constants.carSpeed * Time.deltaTime), 0);
+            movement = Vector3.left * Constants.carSpeed;
+            rb.rotation = Constants.carMoveRotation;
         }
 
         if (Input.GetKey(Constants.carRightMovementKey))
         {
-            movement = new Vector3(Constants.carSpeed * Time.deltaTime, 0);
+            movement = Vector3.right * Constants.carSpeed;
+            rb.rotation = -Constants.carMoveRotation;
         }
+        rb.linearVelocity = movement;
+    }
 
-        transform.position += movement;
+    private void FixedUpdate()
+    {
     }
 }
